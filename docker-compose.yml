@@ -1,0 +1,43 @@
+services:
+  api:
+    container_name: api
+    build: ./api
+    volumes:
+      - ./api:/var/www/html
+      - ./framework:/var/www/framework
+      - ./env:/var/www/env
+    ports:
+      - "5000:80"
+    env_file:
+      - env/.env
+    depends_on:
+      - db
+
+  frontend:
+    container_name: frontend
+    build: ./frontend
+    volumes:
+      - ./frontend:/var/www/html
+      - ./framework:/var/www/framework
+      - ./env:/var/www/env
+    ports:
+      - "3000:80"
+    env_file:
+      - env/.env
+    depends_on:
+      - api
+
+  db:
+    container_name: db
+    image: postgres:15
+    environment:
+      POSTGRES_DB: appdb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  pgdata:
