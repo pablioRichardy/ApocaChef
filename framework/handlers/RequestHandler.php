@@ -18,6 +18,8 @@ class RequestHandler
     
     public function __construct()
     {
+        $this->request = new stdClass();
+        
         if (isset($_SERVER['CONTENT_TYPE']) && stripos($_SERVER['CONTENT_TYPE'], 'application/json') !== false)
         {
             $jsonRequest = file_get_contents('php://input');
@@ -34,7 +36,7 @@ class RequestHandler
 
         foreach ($_GET as $key => $value) {
             if ($key == 'param') continue;
-
+            
             $this->request->$key = $value;
         }
         foreach ($_POST as $key => $value) {
