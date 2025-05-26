@@ -21,25 +21,6 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: teste; Type: TABLE; Schema: public; Owner: user
---
-
-CREATE TABLE public.teste (
-    id text
-);
-
-
-ALTER TABLE public.teste OWNER TO "user";
-
---
--- Data for Name: teste; Type: TABLE DATA; Schema: public; Owner: user
---
-
-COPY public.teste (id) FROM stdin;
-\.
-
-
---
 -- PostgreSQL database dump complete
 --
 
