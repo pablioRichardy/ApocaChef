@@ -41,7 +41,7 @@ class Router
         foreach ($this->routes as $route) {
             if ($route['httpMethod'] === strtoupper($method) && preg_match($this->convertToRegex($route['route']), "/" . $path)) {
                 $class = $route['action'] ?? null;
-                echo $class->run();
+                echo json_encode($class->run());
                 return;
             }
         }
