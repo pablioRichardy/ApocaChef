@@ -14,6 +14,12 @@ $router->addRoute(
     action: new Action("api\controllers\WelcomeController", "sayHelloWorld")
 );
 
+$router->addRoute(
+    httpMethod: "GET",
+    route: "/receitas/cadastrar",
+    action: new Action("api\controllers\ReceitaController", "cadastrarReceita")
+);
+
 $router->execute(
     method: $_SERVER['REQUEST_METHOD'],
     path: $_GET["param"] ?? $_SERVER['REQUEST_URI']

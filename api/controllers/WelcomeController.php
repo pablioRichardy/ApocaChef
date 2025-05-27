@@ -7,6 +7,6 @@ class WelcomeController extends RequestHandler
 {
     public function sayHelloWorld()
     {
-        return "Hello World!";
+        return "Hello, World!";
     }
 }
