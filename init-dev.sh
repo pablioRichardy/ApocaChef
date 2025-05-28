@@ -2,8 +2,8 @@
 git config --global core.autocrlf false
 
 echo "⏫ Subindo containers..."
-docker-compose build --no-cache
-docker-compose up -d
+docker compose build --no-cache
+docker compose up -d
 
 echo "⚙️ Configurando Git Hooks..."
 
