@@ -43,4 +43,24 @@ class ReceitaService extends ReceitaDAO
     {
         return $this->buscarTodas();
     }
+
+    public function buscarReceitaPorId($id)
+    {
+        if (!$id) {
+            http_response_code(400);
+            echo json_encode(["erro" => "ID da receita não informado."]);
+            exit;
+        }
+        return $dados = $this->buscarPorId($id);
+
+        if ($dados) {
+            header('Content-Type: application/json');
+            echo json_encode($dados);
+        } else {
+            http_response_code(404);
+            echo json_encode(["erro" => "Receita não encontrada."]);
+        }
+
+        exit;
+    }
 }

@@ -51,6 +51,16 @@ class ReceitaController extends RequestHandler
     public function listarReceitas()
     {
         $service = new ReceitaService();
-        return $service->listarReceitas();
+        $dados = $service->listarReceitas();
+    }
+
+    public function buscarReceitaPorId()
+    {
+        $id = $this->get("id");
+
+        $service = new ReceitaService();
+        $dados = $service->buscarReceitaPorId($id);
+
+        return $dados;
     }
 }

@@ -55,4 +55,15 @@ class ReceitaDAO extends PostgresFactory
 
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
+
+    public function buscarPorId($id)
+    {
+        $sql = "SELECT * FROM receitas WHERE id = :id";
+
+        $stmt = $this->banco->getConexao()->prepare($sql);
+        $stmt->bindValue(":id", $id, \PDO::PARAM_INT);
+        $stmt->execute();
+
+        return $stmt->fetch(\PDO::FETCH_ASSOC); // retorna apenas uma receita
+    }
 }

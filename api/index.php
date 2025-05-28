@@ -13,6 +13,11 @@ $router->addRoute(
     route: "/receitas/listar",
     action: new Action("api\controllers\ReceitaController", "listarReceitas")
 );
+$router->addRoute(
+    httpMethod: "GET",
+    route: "/receitas/listar/{id}",
+    action: new Action("api\controllers\ReceitaController", "buscarReceitaPorId")
+);
 
 $router->addRoute(
     httpMethod: "POST",
