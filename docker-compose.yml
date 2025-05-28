@@ -1,6 +1,6 @@
 services:
   api:
-    container_name: api
+    container_name: api_apocachef
     build: ./api
     volumes:
       - ./api:/var/www/html
@@ -29,13 +29,14 @@ services:
 
   db:
     container_name: db
-    image: postgres:15
+    build: ./api/database
     environment:
-      POSTGRES_DB: appdb
+      POSTGRES_DB: receitas_apocalipticas
       POSTGRES_USER: user
       POSTGRES_PASSWORD: pass
     volumes:
       - pgdata:/var/lib/postgresql/data
+      - ./api/database/backups:/api/database/backups
     ports:
       - "5432:5432"
 
