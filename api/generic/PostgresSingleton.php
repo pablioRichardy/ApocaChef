@@ -1,6 +1,6 @@
 <?php
 
-namespace generic;
+namespace api\generic;
 
 use PDO;
 use PDOException;

@@ -1,23 +1,58 @@
 <?php
+
 namespace api\dao;
 
-use generic\PostgresFactory;
+use api\generic\PostgresFactory;
 
 class ReceitaDAO extends PostgresFactory
 {
-    public function inserir($titulo, $descricao, $modo_preparo, $imagem, $dificuldade, $tempo_preparo)
+    public function inserir($titulo, $descricao, $imagem, $dificuldade, $tempo_preparo)
     {
-        $sql = "INSERT INTO receitas (titulo, descricao, modo_preparo, imagem, dificuldade, tempo_preparo) VALUES (:titulo, :descricao, :modo_preparo, :imagem, :dificuldade, :tempo_preparo)";
+        $sql = "INSERT INTO receitas (titulo, descricao, imagem, dificuldade, tempo_preparo) VALUES (:titulo, :descricao, :imagem, :dificuldade, :tempo_preparo)";
+
+        $stmt = $this->banco->getConexao()->prepare($sql);
+        return $stmt->execute([
+            ':titulo' => $titulo,
+            ':descricao' => $descricao,
+            ':imagem' => $imagem,
+            ':dificuldade' => $dificuldade,
+            ':tempo_preparo' => $tempo_preparo
+        ]);
+
+        return $this->banco->getConexao()->lastInsertId();
+    }
+
+    public function atualizar($id, $titulo, $descricao, $imagem, $dificuldade, $tempo_preparo)
+    {
+        $sql = "UPDATE receitas 
+            SET titulo = :titulo, descricao = :descricao, imagem = :imagem, dificuldade = :dificuldade, tempo_preparo = :tempo_preparo
+            WHERE id = :id";
+
+        $stmt = $this->banco->getConexao()->prepare($sql);
+        return $stmt->execute([
+            ':id' => $id,
+            ':titulo' => $titulo,
+            ':descricao' => $descricao,
+            ':imagem' => $imagem,
+            ':dificuldade' => $dificuldade,
+            ':tempo_preparo' => $tempo_preparo
+        ]);
+    }
+    public function deletar($id)
+    {
+        $sql = "DELETE FROM receitas WHERE id = :id";
 
         $stmt = $this->banco->getConexao()->prepare($sql);
 
-        $stmt->bindValue(':titulo', $titulo);
-        $stmt->bindValue(':descricao', $descricao);
-        $stmt->bindValue(':modo_preparo', $modo_preparo);
-        $stmt->bindValue(':imagem', $imagem);
-        $stmt->bindValue(':dificuldade', $dificuldade);
-        $stmt->bindValue(':tempo_preparo', $tempo_preparo);
+        return $stmt->execute([':id' => $id]);
+    }
+    public function buscarTodas()
+    {
+        $sql = "SELECT * FROM receitas";
 
-        return $stmt->execute();
+        $stmt = $this->banco->getConexao()->prepare($sql);
+        $stmt->execute();
+
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

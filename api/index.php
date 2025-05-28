@@ -9,18 +9,30 @@ $env = new EnvHandler("/var/www/env/.env");
 
 $router = new Router($env->get("API_BASE_URL"));
 $router->addRoute(
-    httpMethod: "GET", 
-    route: "/welcome", 
-    action: new Action("api\controllers\WelcomeController", "sayHelloWorld")
+    httpMethod: "GET",
+    route: "/receitas/listar",
+    action: new Action("api\controllers\ReceitaController", "listarReceitas")
 );
 
 $router->addRoute(
-    httpMethod: "GET",
+    httpMethod: "POST",
     route: "/receitas/cadastrar",
-    action: new Action("api\controllers\ReceitaController", "cadastrarReceita")
+    action: new Action("api\controllers\ReceitaController", "cadastrarReceitas")
+);
+
+$router->addRoute(
+    httpMethod: "POST",
+    route: "/receitas/atualizar",
+    action: new Action("api\controllers\ReceitaController", "atualizarReceitas")
+);
+
+$router->addRoute(
+    httpMethod: "POST",
+    route: "/receitas/deletar",
+    action: new Action("api\controllers\ReceitaController", "deletarReceitas")
 );
 
 $router->execute(
     method: $_SERVER['REQUEST_METHOD'],
     path: $_GET["param"] ?? $_SERVER['REQUEST_URI']
-); 
+);
