@@ -7,5 +7,5 @@ interface IMiddleware
      * @param ?string $response
      * @return void
      */
-    public function process(?string $response): string;
+    public function process(array|string $response): string;
 }
