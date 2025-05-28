@@ -2,6 +2,7 @@
 namespace framework\services;
 
 use framework\services\Action;
+use framework\services\IMiddleware;
 
 /**
  * Router class to handle HTTP routing.
@@ -16,10 +17,12 @@ class Router
 {
     private array $routes = [];
     private string $basePath;
+    private ?IMiddleware $middleware;
 
-    public function __construct(string $basePath)
+    public function __construct(string $basePath, ?IMiddleware $middleware = null)
     {
         $this->basePath = $basePath;
+        $this->middleware = $middleware;
     }
 
     public function getBasePath(): string
@@ -39,9 +42,12 @@ class Router
     public function execute(string $method, string $path): void
     {
         foreach ($this->routes as $route) {
-            if ($route['httpMethod'] === strtoupper($method) && preg_match($this->convertToRegex($route['route']), "/" . $path)) {
+            if (
+                $route['httpMethod'] === strtoupper($method) 
+                && preg_match($this->convertToRegex($route['route']), "/" . ($path == "/" ? "/" : $path))
+            ) {
                 $class = $route['action'] ?? null;
-                echo $class->run();
+                echo $this->middleware ? $this->middleware->process($class->run()) : $class->run();
                 return;
             }
         }

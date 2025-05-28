@@ -20,7 +20,12 @@ class RequestHandler
     {
         $this->request = new stdClass();
         
-        if (isset($_SERVER['CONTENT_TYPE']) && stripos($_SERVER['CONTENT_TYPE'], 'application/json') !== false)
+        if (
+            isset($_SERVER['CONTENT_TYPE']) 
+            && stripos($_SERVER['CONTENT_TYPE'], 'application/json') !== false
+            || $_SERVER['REQUEST_METHOD'] == "PUT"
+            || $_SERVER['REQUEST_METHOD'] == "DELETE"
+        )
         {
             $jsonRequest = file_get_contents('php://input');
             $jsonData = json_decode($jsonRequest, true);
