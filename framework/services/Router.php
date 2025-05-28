@@ -42,7 +42,10 @@ class Router
     public function execute(string $method, string $path): void
     {
         foreach ($this->routes as $route) {
-            if ($route['httpMethod'] === strtoupper($method) && preg_match($this->convertToRegex($route['route']), "/" . $path == "/" ? "/" : $path)) {
+            if (
+                $route['httpMethod'] === strtoupper($method) 
+                && preg_match($this->convertToRegex($route['route']), "/" . ($path == "/" ? "/" : $path))
+            ) {
                 $class = $route['action'] ?? null;
                 echo $this->middleware ? $this->middleware->process($class->run()) : $class->run();
                 return;
