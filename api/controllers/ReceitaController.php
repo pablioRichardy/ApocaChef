@@ -52,6 +52,8 @@ class ReceitaController extends RequestHandler
     {
         $service = new ReceitaService();
         $dados = $service->listarReceitas();
+
+        return $dados;
     }
 
     public function buscarReceitaPorId()

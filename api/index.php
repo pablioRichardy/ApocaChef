@@ -1,13 +1,14 @@
 <?
 include "../framework/autoload.php";
 
+use api\middlewares\ResponseMiddleware;
 use framework\services\Action;
 use framework\services\Router;
 use framework\handlers\EnvHandler;
 
 $env = new EnvHandler("/var/www/env/.env");
 
-$router = new Router($env->get("API_BASE_URL"));
+$router = new Router($env->get("API_BASE_URL"), new ResponseMiddleware);
 $router->addRoute(
     httpMethod: "GET",
     route: "/receitas/listar",
@@ -26,13 +27,13 @@ $router->addRoute(
 );
 
 $router->addRoute(
-    httpMethod: "POST",
+    httpMethod: "PUT",
     route: "/receitas/atualizar",
     action: new Action("api\controllers\ReceitaController", "atualizarReceitas")
 );
 
 $router->addRoute(
-    httpMethod: "POST",
+    httpMethod: "DELETE",
     route: "/receitas/deletar",
     action: new Action("api\controllers\ReceitaController", "deletarReceitas")
 );
