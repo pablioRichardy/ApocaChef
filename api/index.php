@@ -9,8 +9,8 @@ $env = new EnvHandler("/var/www/env/.env");
 
 $router = new Router($env->get("API_BASE_URL"));
 $router->addRoute(
-    httpMethod: "PUT", 
-    route: "/welcome", 
+    httpMethod: "GET", 
+    route: "/welcome/{id}", 
     action: new Action("api\controllers\WelcomeController", "sayHelloWorld")
 );
 

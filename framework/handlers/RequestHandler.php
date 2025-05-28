@@ -52,6 +52,14 @@ class RequestHandler
         }
     }
 
+    public function setRouteParams(?array $params)
+    {
+        if(!$params) return;
+        
+        foreach($params as $param => $value)
+            $this->request->$param = $value;
+    }
+
     public function get(string $key): mixed
     {
         return $this->request->$key ?? null;
