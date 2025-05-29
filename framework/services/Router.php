@@ -47,14 +47,12 @@ class Router
     {
         try
         {
-            $this->validateAuthorization();
-
             foreach ($this->routes as $route) {
                 $matched = $this->matchRoute($route['route'], "/" . ($path == "/" ? "/" : $path));
-                
                 if (
                     $route['httpMethod'] === strtoupper($method) && $matched
                 ) {
+                    $route['authorization'] ? $this->validateAuthorization() : "";
                     $class = $route['action'] ?? null;
                     echo $this->middleware ? $this->middleware->process($class->run($matched["params"])) : $class->run($matched["params"]);
                     return;
@@ -65,7 +63,11 @@ class Router
         }
         catch(Exception $error)
         {
-            echo $this->middleware ? $this->middleware->process($error->getMessage()) : throw new Exception($error->getMessage());
+            if ($this->middleware) {
+                echo $this->middleware->process($error);
+            } else {
+                throw $error;
+            }
         }
     }
 
