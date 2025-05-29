@@ -79,7 +79,7 @@ class Router
         } elseif (isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
             $authHeader = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
         }
-
+        
         if ($authHeader && preg_match('/Bearer\s(\S+)/', $authHeader, $matches)) 
         {
             $token = $matches[1];
