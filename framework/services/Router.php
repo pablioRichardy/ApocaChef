@@ -42,12 +42,13 @@ class Router
     public function execute(string $method, string $path): void
     {
         foreach ($this->routes as $route) {
-            $params = $this->extractRouteParams($route['route'], "/" . ($path == "/" ? "/" : $path));
+            $matched = $this->matchRoute($route['route'], "/" . ($path == "/" ? "/" : $path));
+            
             if (
-                $route['httpMethod'] === strtoupper($method) && $params
+                $route['httpMethod'] === strtoupper($method) && $matched
             ) {
                 $class = $route['action'] ?? null;
-                echo $this->middleware ? $this->middleware->process($class->run($params)) : $class->run($params);
+                echo $this->middleware ? $this->middleware->process($class->run($matched["params"])) : $class->run($matched["params"]);
                 return;
             }
         }
@@ -56,27 +57,30 @@ class Router
         return;
     }
 
-    function extractRouteParams(string $route, string $url): ?array
+    function matchRoute(string $route, string $url): ?array
     {
-        // Captura os nomes dos parâmetros
+        // Captura nomes dos parâmetros
         preg_match_all('/\{([a-zA-Z0-9_]+)\}/', $route, $paramMatches);
-        $paramNames = $paramMatches[1]; // Ex: ['id']
+        $paramNames = $paramMatches[1]; // ['id']
 
-        // Constrói regex substituindo os {param} por grupos capturadores
+        // Substitui {param} por regex de captura (ex: ([^/]+))
         $regexPattern = preg_replace_callback('/\{[a-zA-Z0-9_]+\}/', function () {
-            return '([a-zA-Z0-9_]+)';
+            return '([^\/]+)'; // captura qualquer coisa que não seja barra
         }, $route);
 
-        // Escapa os demais caracteres especiais (exceto os parâmetros já substituídos)
-        $regexPattern = str_replace('/', '\/', $regexPattern);
-        $regex = "#^{$regexPattern}$#";
+        // Gera regex final
+        $regex = "#^" . str_replace('/', '\/', $regexPattern) . "$#";
 
-        // Faz o match
+        // Tenta casar
         if (preg_match($regex, $url, $valueMatches)) {
-            array_shift($valueMatches); // Remove o match completo
-            return array_combine($paramNames, $valueMatches); // Ex: ['id' => '1']
+            array_shift($valueMatches);
+            return [
+                'matched' => true,
+                'params' => array_combine($paramNames, $valueMatches),
+            ];
         }
 
+        // Nenhum match
         return null;
     }
 }
