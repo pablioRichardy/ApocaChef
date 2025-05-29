@@ -10,7 +10,7 @@ $env = new EnvHandler("/var/www/env/.env");
 
 $router = new Router($env->get("API_BASE_URL"), new ResponseMiddleware);
 
-//Rotas de Receitas
+// Rotas de Receitas
 $router->addRoute(
     httpMethod: "GET",
     route: "/receitas/listar",
@@ -40,7 +40,7 @@ $router->addRoute(
     action: new Action("api\controllers\ReceitaController", "deletarReceitas")
 );
 
-//Rotas de Ingredientes
+// Rotas de Ingredientes
 $router->addRoute(
     httpMethod: "GET",
     route: "/ingredientes/listar",
@@ -69,6 +69,26 @@ $router->addRoute(
     httpMethod: "DELETE",
     route: "/ingredientes/deletar/{id}",
     action: new Action("api\controllers\IngredienteController", "deletarIngrediente")
+);
+
+// Rotas de Relação Receita-Ingrediente
+
+$router->addRoute(
+    httpMethod: "POST",
+    route: "/receita/{id}/ingrediente",
+    action: new Action("api\controllers\ReceitaIngredienteController", "adicionarIngrediente")
+);
+
+$router->addRoute(
+    httpMethod: "GET",
+    route: "/receitas/{id}/ingredientes",
+    action: new Action("api\controllers\ReceitaIngredienteController", "listarIngredientesDaReceita")
+);
+
+$router->addRoute(
+    httpMethod: "DELETE",
+    route: "/receitas/{id}/ingredientes/{ingrediente_id}",
+    action: new Action("api\controllers\ReceitaIngredienteController", "removerIngredienteDaReceita")
 );
 
 $router->execute(
