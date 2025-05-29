@@ -11,7 +11,8 @@ $router = new Router($env->get("API_BASE_URL"));
 $router->addRoute(
     httpMethod: "GET", 
     route: "/welcome", 
-    action: new Action("api\controllers\WelcomeController", "sayHelloWorld")
+    action: new Action("api\controllers\WelcomeController", "sayHelloWorld"),
+    authorization: true
 );
 
 $router->execute(

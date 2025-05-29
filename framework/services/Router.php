@@ -1,8 +1,11 @@
 <?
 namespace framework\services;
 
+use Exception;
 use framework\services\Action;
 use framework\services\IMiddleware;
+
+use framework\config\AuthKeys;
 
 /**
  * Router class to handle HTTP routing.
@@ -30,31 +33,59 @@ class Router
         return $this->basePath;
     }
 
-    public function addRoute(string $httpMethod, string $route, Action $action): void
+    public function addRoute(string $httpMethod, string $route, Action $action, bool $authorization = false): void
     {
         $this->routes[] = [
             'httpMethod' => strtoupper($httpMethod),
             'route' => "{$this->getBasePath()}$route",
-            'action' => $action
+            'action' => $action,
+            'authorization' => $authorization
         ];
     }
 
     public function execute(string $method, string $path): void
     {
-        foreach ($this->routes as $route) {
-            $matched = $this->matchRoute($route['route'], "/" . ($path == "/" ? "/" : $path));
-            
-            if (
-                $route['httpMethod'] === strtoupper($method) && $matched
-            ) {
-                $class = $route['action'] ?? null;
-                echo $this->middleware ? $this->middleware->process($class->run($matched["params"])) : $class->run($matched["params"]);
-                return;
+        try
+        {
+            $this->validateAuthorization();
+
+            foreach ($this->routes as $route) {
+                $matched = $this->matchRoute($route['route'], "/" . ($path == "/" ? "/" : $path));
+                
+                if (
+                    $route['httpMethod'] === strtoupper($method) && $matched
+                ) {
+                    $class = $route['action'] ?? null;
+                    echo $this->middleware ? $this->middleware->process($class->run($matched["params"])) : $class->run($matched["params"]);
+                    return;
+                }
             }
+
+            throw new Exception("Route not found for method $method and route $path");
         }
+        catch(Exception $error)
+        {
+            echo $this->middleware ? $this->middleware->process($error->getMessage()) : throw new Exception($error->getMessage());
+        }
+    }
+
+    public function validateAuthorization()
+    {
+        $authHeader = null;
+        $token = null;
         
-        echo "Route not found for method $method and route $path";
-        return;
+        if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
+            $authHeader = $_SERVER['HTTP_AUTHORIZATION'];
+        } elseif (isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
+            $authHeader = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
+        }
+
+        if ($authHeader && preg_match('/Bearer\s(\S+)/', $authHeader, $matches)) 
+        {
+            $token = $matches[1];
+        }
+
+        return $token == AuthKeys::$APOCACHEF ? null : throw new Exception("Access not authorized!");
     }
 
     function matchRoute(string $route, string $url): ?array
