@@ -8,6 +8,26 @@ use framework\handlers\RequestHandler;
 
 class ReceitaController extends RequestHandler
 {
+    //Listar Todas as Receitas
+    public function listarReceitas()
+    {
+        $service = new ReceitaService();
+        $dados = $service->listarReceitas();
+        
+        return $dados;
+    }
+    //Listar Receita por ID
+    public function buscarReceitaPorId()
+    {
+        $id = $this->get("id");
+
+        $service = new ReceitaService();
+        $dados = $service->buscarReceitaPorId($id);
+
+        return $dados;
+    }
+
+    //Cadastrar Nova Receita
     public function cadastrarReceitas()
     {
         $titulo = $this->get("titulo");
@@ -22,6 +42,7 @@ class ReceitaController extends RequestHandler
         return $resultado;
     }
 
+    //Atualizar Receita Existente
     public function atualizarReceitas()
     {
         $id = $this->get("id");
@@ -31,13 +52,13 @@ class ReceitaController extends RequestHandler
         $dificuldade = $this->get("dificuldade");
         $tempo_preparo = $this->get("tempo_preparo");
 
-        var_dump($id);
         $service = new ReceitaService();
         $resultado = $service->atualizarReceita($id, $titulo, $descricao, $imagem, $dificuldade, $tempo_preparo);
 
         return $resultado;
     }
 
+    //Deletar Uma Receita
     public function deletarReceitas()
     {
         $id = $this->get("id");
@@ -46,23 +67,5 @@ class ReceitaController extends RequestHandler
         $resultado = $service->deletarReceita($id);
 
         return $resultado;
-    }
-
-    public function listarReceitas()
-    {
-        $service = new ReceitaService();
-        $dados = $service->listarReceitas();
-
-        return $dados;
-    }
-
-    public function buscarReceitaPorId()
-    {
-        $id = $this->get("id");
-
-        $service = new ReceitaService();
-        $dados = $service->buscarReceitaPorId($id);
-
-        return $dados;
     }
 }

@@ -3,42 +3,10 @@
 namespace api\service;
 
 use api\dao\ReceitaDAO;
+use Exception;
 
 class ReceitaService extends ReceitaDAO
 {
-    public function cadastrarReceita($titulo, $descricao, $imagem, $dificuldade, $tempo_preparo)
-    {
-        if (!$titulo || !$descricao || !$dificuldade) {
-            return "Todos os campos sao obrigatorios!";
-        }
-
-        $sucesso = $this->inserir($titulo, $descricao, $imagem, $dificuldade, $tempo_preparo);
-
-        return $sucesso ? 'Receita cadastrada com sucesso.' : 'Erro ao cadastrar receita.';
-    }
-
-    public function atualizarReceita($id, $titulo, $descricao, $imagem, $dificuldade, $tempo_preparo)
-    {
-        if (!$id || !$titulo || !$descricao || !$dificuldade) {
-            return "Todos os campos são obrigatórios!";
-        }
-
-        $sucesso = $this->atualizar($id, $titulo, $descricao, $imagem, $dificuldade, $tempo_preparo);
-
-        return $sucesso ? "Receita atualizada com sucesso." : "Erro ao atualizar receita.";
-    }
-
-    public function deletarReceita($id)
-    {
-        if (!$id) {
-            return "ID da receita é obrigatório!";
-        }
-
-        $sucesso = $this->deletar($id);
-
-        return $sucesso ? "Receita deletada com sucesso." : "Erro ao deletar receita.";
-    }
-
     public function listarReceitas()
     {
         return $this->buscarTodas();
@@ -47,20 +15,43 @@ class ReceitaService extends ReceitaDAO
     public function buscarReceitaPorId($id)
     {
         if (!$id) {
-            http_response_code(400);
-            echo json_encode(["erro" => "ID da receita não informado."]);
-            exit;
+            throw new Exception("ID não informado ou não existe.");
         }
         return $dados = $this->buscarPorId($id);
 
-        if ($dados) {
-            header('Content-Type: application/json');
-            echo json_encode($dados);
-        } else {
-            http_response_code(404);
-            echo json_encode(["erro" => "Receita não encontrada."]);
+        return $dados;
+    }
+    
+    public function cadastrarReceita($titulo, $descricao, $imagem, $dificuldade, $tempo_preparo)
+    {
+        if (!$titulo || !$descricao || !$dificuldade) {
+            throw new Exception("Todos os campos são obrigatórios!");
         }
 
-        exit;
+        $sucesso = $this->inserir($titulo, $descricao, $imagem, $dificuldade, $tempo_preparo);
+
+        return $sucesso;
+    }
+
+    public function atualizarReceita($id, $titulo, $descricao, $imagem, $dificuldade, $tempo_preparo)
+    {
+        if (!$id || !$titulo || !$descricao || !$dificuldade) {
+            throw new Exception("Todos os campos são obrigatórios!");
+        }
+
+        $sucesso = $this->atualizar($id, $titulo, $descricao, $imagem, $dificuldade, $tempo_preparo);
+
+        return $sucesso;
+    }
+
+    public function deletarReceita($id)
+    {
+        if (!$id) {
+            throw new Exception("ID da receita é obrigatório!");
+        }
+
+        $sucesso = $this->deletar($id);
+
+        return $sucesso;
     }
 }

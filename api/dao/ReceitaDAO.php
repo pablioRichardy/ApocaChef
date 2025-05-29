@@ -6,6 +6,28 @@ use api\generic\PostgresFactory;
 
 class ReceitaDAO extends PostgresFactory
 {
+    public function buscarTodas()
+    {
+        $sql = "SELECT * FROM receitas";
+
+        $stmt = $this->banco->getConexao()->prepare($sql);
+        $stmt->execute();
+
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    public function buscarPorId($id)
+    {
+        $sql = "SELECT * FROM receitas WHERE id = :id";
+
+        $stmt = $this->banco->getConexao()->prepare($sql);
+        // Executa a query passando um array associativo com os valores
+        $stmt->execute([
+            ":id" => $id
+        ]);
+        // Retorna o resultado como array associativo (1 receita apenas)
+        return $stmt->fetch(\PDO::FETCH_ASSOC);
+    }
     public function inserir($titulo, $descricao, $imagem, $dificuldade, $tempo_preparo)
     {
         $sql = "INSERT INTO receitas (titulo, descricao, imagem, dificuldade, tempo_preparo) VALUES (:titulo, :descricao, :imagem, :dificuldade, :tempo_preparo)";
@@ -45,25 +67,5 @@ class ReceitaDAO extends PostgresFactory
         $stmt = $this->banco->getConexao()->prepare($sql);
 
         return $stmt->execute([':id' => $id]);
-    }
-    public function buscarTodas()
-    {
-        $sql = "SELECT * FROM receitas";
-
-        $stmt = $this->banco->getConexao()->prepare($sql);
-        $stmt->execute();
-
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
-    }
-
-    public function buscarPorId($id)
-    {
-        $sql = "SELECT * FROM receitas WHERE id = :id";
-
-        $stmt = $this->banco->getConexao()->prepare($sql);
-        $stmt->bindValue(":id", $id, \PDO::PARAM_INT);
-        $stmt->execute();
-
-        return $stmt->fetch(\PDO::FETCH_ASSOC); // retorna apenas uma receita
     }
 }
