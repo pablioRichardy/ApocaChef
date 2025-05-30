@@ -22,7 +22,8 @@ class Action
         }
 
         $instance = new $this->class();
-        $instance->setRouteParams($params);
+        if($params)
+            $instance->setRouteParams($params);
 
         if (!method_exists($instance, $this->method)) {
             throw new \Exception("Method {$this->method} not found in class {$this->class}");

@@ -7,7 +7,16 @@ class HomeController
     {
         return <<<HTML
             <div class="content">
-                Meu conteúdo
+                <h1>ApocaChef</h1>
+                <section>
+                    <h2>Receitas Recentes</h2>
+                    <div class="cards">
+                        <div class="card">
+                            <div class="card-title"></div>
+                            <div class="card-desc"></div>
+                        </div>
+                    </div>
+                </section>
             </div>
         HTML;
     }

@@ -48,7 +48,7 @@ class Router
         try
         {
             foreach ($this->routes as $route) {
-                $matched = $this->matchRoute($route['route'], "/" . ($path == "/" ? "/" : $path));
+                $matched = $this->matchRoute($route['route'], $path == "/" ? "/" : "/" . $path);
                 if (
                     $route['httpMethod'] === strtoupper($method) && $matched
                 ) {

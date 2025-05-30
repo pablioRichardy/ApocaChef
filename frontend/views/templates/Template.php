@@ -1,6 +1,7 @@
 <?
 namespace frontend\views\templates;
 
+use Exception;
 use framework\services\IMiddleware;
 
 class Template implements IMiddleware
@@ -30,7 +31,7 @@ class Template implements IMiddleware
         HTML;
     }
 
-    public function process(?string $response): string
+    public function process(array|string|Exception $response): string
     {
         return <<<HTML
             {$this->header()}

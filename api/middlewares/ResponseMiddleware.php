@@ -10,7 +10,6 @@ class ResponseMiddleware implements IMiddleware
     public function process(array|string|Exception $response): string
     {
         header('Content-Type: application/json');
-        
         if ($response instanceof Exception) {
             http_response_code(401);
             return json_encode([
