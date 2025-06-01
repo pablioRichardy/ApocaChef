@@ -28,14 +28,17 @@ class RequestHandler
         )
         {
             $jsonRequest = file_get_contents('php://input');
-            $jsonData = json_decode($jsonRequest, true);
             
-            if (json_last_error() === JSON_ERROR_NONE) {
-                foreach ($jsonData as $key => $value) {
-                    $this->request->$key = $value;
+            if($jsonRequest){
+                $jsonData = json_decode($jsonRequest, true);
+                
+                if (json_last_error() === JSON_ERROR_NONE) {
+                    foreach ($jsonData as $key => $value) {
+                        $this->request->$key = $value;
+                    }
+                } else {
+                    throw new \Exception("Invalid JSON data: " . json_last_error_msg());
                 }
-            } else {
-                throw new \Exception("Invalid JSON data: " . json_last_error_msg());
             }
         }
 
