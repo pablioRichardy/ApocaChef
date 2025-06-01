@@ -86,7 +86,7 @@ class Router
         {
             $token = $matches[1];
         }
-
+        
         return $token == AuthKeys::$APOCACHEF ? null : throw new Exception("Access not authorized!");
     }
 

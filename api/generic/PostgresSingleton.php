@@ -2,6 +2,7 @@
 
 namespace api\generic;
 
+use Exception;
 use PDO;
 use PDOException;
 
@@ -22,7 +23,7 @@ class PostgresSingleton
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
             ]);
         } catch (PDOException $e) {
-            die("Erro ao conectar com PostgreSQL: " . $e->getMessage());
+            throw new Exception("Erro ao conectar com PostgreSQL");
         }
     }
 
