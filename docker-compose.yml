@@ -36,7 +36,7 @@ services:
       POSTGRES_PASSWORD: pass
     volumes:
       - pgdata:/var/lib/postgresql/data
-      - ./api/database/backups:/api/database/backups
+      - ./api/database/backups:/api/database/backups  # mantém acesso aos arquivos
     ports:
       - "5432:5432"
 
