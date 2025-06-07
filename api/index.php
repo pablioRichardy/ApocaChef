@@ -1,5 +1,6 @@
 <?
 include "../framework/autoload.php";
+require_once './vendor/autoload.php';
 
 use api\middlewares\ResponseMiddleware;
 use framework\services\Action;

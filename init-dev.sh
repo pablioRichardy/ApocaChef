@@ -2,6 +2,7 @@
 git config --global core.autocrlf false
 
 echo "⏫ Subindo containers..."
+docker compose down -v
 docker compose build --no-cache
 docker compose up -d
 

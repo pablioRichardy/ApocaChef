@@ -7,6 +7,9 @@ use framework\services\IMiddleware;
 
 use framework\config\AuthKeys;
 
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+
 /**
  * Router class to handle HTTP routing.
  *
@@ -87,7 +90,14 @@ class Router
             $token = $matches[1];
         }
         
-        return $token == AuthKeys::$APOCACHEF ? null : throw new Exception("Access not authorized!");
+        try
+        {
+            return JWT::decode($token, new Key("batman_alerquina", 'HS256'));
+        }
+        catch(Exception $e)
+        {
+            return throw new Exception("Access not authorized!");
+        }
     }
 
     function matchRoute(string $route, string $url): ?array
