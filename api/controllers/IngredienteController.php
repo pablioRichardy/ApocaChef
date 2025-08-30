@@ -24,6 +24,16 @@ class IngredienteController extends RequestHandler
 
         return $dados;
     }
+
+    public function listarIngredientePorNome()
+    {
+        $nome = $this->get("nome");
+        $service = new IngredienteService();
+        $dados = $service->listarIngredientePorNome($nome);
+
+        return $dados;
+    }
+
     public function cadastrarIngredientes()
     {
         $nome = $this->get("nome");

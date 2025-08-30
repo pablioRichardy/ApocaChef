@@ -25,6 +25,21 @@ class IngredienteDAO extends PostgresFactory
         // Retorna o resultado como array associativo (1 ingrediente apenas)
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
+
+    public function buscarIngredientePorNome($nome)
+    {
+        $sql = "SELECT * FROM ingredientes WHERE nome ILIKE :nome";
+        
+        $stmt = $this->banco->getConexao()->prepare($sql);
+        
+        // Executa a query usando ILIKE para busca case-insensitive com wildcard
+        $stmt->execute([
+            ":nome" => "%{$nome}%"
+        ]);
+        // Retorna todos os ingredientes que contenham o nome procurado
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
     public function inserirIngrediente($nome)
     {
         $sql = "INSERT INTO ingredientes (nome) VALUES (:nome)";

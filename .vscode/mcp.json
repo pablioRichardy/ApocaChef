@@ -1,0 +1,23 @@
+{
+	"servers": {
+		"postgres-mcp": {
+			"type": "stdio",
+			"command": "docker",
+			"args": [
+				"run",
+				"-i",
+				"--rm",
+				"--network",
+				"apocachef_default",
+				"-e",
+				"DATABASE_URI=postgresql://user:pass@db:5432/receitas_apocalipticas",
+				"crystaldba/postgres-mcp",
+				"--access-mode=unrestricted"
+			],
+			"env": {
+				"DATABASE_URI": "postgresql://user:pass@localhost:5432/receitas_apocalipticas"
+			}
+		}
+	},
+	"inputs": []
+}

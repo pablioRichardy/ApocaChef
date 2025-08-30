@@ -62,6 +62,13 @@ $router->addRoute(
 );
 
 $router->addRoute(
+    httpMethod: "GET",
+    route: "/ingredientes/buscar/{nome}",
+    action: new Action("api\controllers\IngredienteController", "listarIngredientePorNome"),
+    authorization: true
+);
+
+$router->addRoute(
     httpMethod: "POST",
     route: "/ingredientes/cadastrar",
     action: new Action("api\controllers\IngredienteController", "cadastrarIngredientes"),

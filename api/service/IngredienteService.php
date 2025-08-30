@@ -22,6 +22,18 @@ class IngredienteService extends IngredienteDAO
 
         return $sucesso;
     }
+
+    public function listarIngredientePorNome($nome)
+    {
+        if (!$nome) {
+            throw new Exception("Nome do ingrediente não informado.");
+        }
+        
+        $sucesso = $this->buscarIngredientePorNome($nome);
+
+        return $sucesso;
+    }
+
     public function cadastrarIngrediente($nome)
     {
         if (!$nome) {
